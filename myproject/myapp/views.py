@@ -11,13 +11,13 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-class LoggedTemplateView(TemplateView):
+class LoggerMixin:
     def get(self, request, *args, **kwargs):
         logger.info(f"{request.path} accessed from {get_client_ip(request)}")
         return super().get(self, request, *args, **kwargs)
         
-class IndexView(LoggedTemplateView):
+class IndexView(LoggerMixin, TemplateView):
     template_name = 'myapp/index.html'
     
-class AboutView(LoggedTemplateView):
+class AboutView(LoggerMixin, TemplateView):
     template_name = 'myapp/about.html'
