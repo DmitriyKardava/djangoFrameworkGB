@@ -18,7 +18,7 @@ class ClientProductsView(ListView):
                 orders = Order.objects.filter(client=1, order_date__gte = timezone.now().date() - timedelta(days=365))
             case _:
                 orders = Order.objects.filter(client=1)      
-        queryset = OrderItems.objects.filter(order__in=orders).order_by('product').distinct()
+        queryset = OrderItems.objects.filter(order__in=orders).order_by('created').distinct()
         
         return queryset
     
