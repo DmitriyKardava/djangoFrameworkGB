@@ -1,0 +1,23 @@
+{% extends 'shopapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-md">
+        <div>
+            <a href="{{request.path}}?period=per_week">за неделю</a>
+            <a href="{{request.path}}?period=per_month">за месяц</a>
+            <a href="{{request.path}}?period=per_year">за год</a>
+        </div>
+    {% for order in page_obj %}
+    <div class="row">
+        <div class="col-1">{{ order.product.name }}</div>
+        <div class="col-1">{{ order.product.price }}</div>
+    </div>            
+    {% endfor%}
+        
+    
+
+{% block pagination %}
+    {% include 'includes/pagination.html' %}
+{% endblock pagination %}
+</div>
+{% endblock content %}
