@@ -7,18 +7,17 @@ from shopapp.models import Order, OrderItems
 class ClientProductsView(ListView):
     template_name = 'shopapp/client_products.html'
     paginate_by = 10
-    
-    def get_queryset(self) :
-        orders = Order.objects.filter(client=1)
+    def get_queryset(self):
         period = self.request.GET.get('period')
         match period:
             case 'per_week':
-                orders = orders.filter(order_date__gte = timezone.now().date() - timedelta(days=7))
+                orders = Order.objects.filter(client=1, order_date__gte = timezone.now().date() - timedelta(days=7))
             case 'per_month':
-                orders = orders.filter(order_date__gte = timezone.now().date() - timedelta(days=30))
+                orders = Order.objects.filter(client=1, order_date__gte = timezone.now().date() - timedelta(days=30))
             case 'per_year':
-                orders = orders.filter(order_date__gte = timezone.now().date() - timedelta(days=365))
-                
+                orders = Order.objects.filter(client=1, order_date__gte = timezone.now().date() - timedelta(days=365))
+            case _:
+                orders = Order.objects.filter(client=1)      
         queryset = OrderItems.objects.filter(order__in=orders).order_by('product').distinct()
         
         return queryset
