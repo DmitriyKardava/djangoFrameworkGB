@@ -1,5 +1,11 @@
+from pathlib import Path
+from time import time
 from django.db import models
 
+def product_img_path(instance, filename):
+    num = int(time() * 1000)
+    suff = Path(filename).suffix
+    return "product_{0}/img/{1}".format(instance.name, f"pic_{num}{suff}")
 
 class GetUndeletedManager(models.Manager): 
     def get_queryset(self):
@@ -8,7 +14,6 @@ class GetUndeletedManager(models.Manager):
 
 class BaseModel(models.Model):
     objects = GetUndeletedManager()
-
     created = models.DateTimeField(auto_now_add=True, verbose_name="Created", editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name="Edited", editable=False )
     deleted = models.BooleanField(default=False) 
@@ -40,7 +45,7 @@ class Product(BaseModel):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     count = models.IntegerField()
     added_at = models.DateField(auto_now_add=True, blank=True)
-
+    img = models.ImageField(upload_to=product_img_path, blank=True, null=True)
     class Meta:
         ordering = ["name"]
 
@@ -60,7 +65,7 @@ class Order(BaseModel):
         for order_item  in order_items:
             result += order_item.items_count * order_item.product.price        
         return result
-                       
+
     def __str__(self):
         return f'Client: {self.client.name}, OrderPrice: {self.order_price}'
 

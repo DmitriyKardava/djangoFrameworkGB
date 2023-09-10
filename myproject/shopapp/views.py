@@ -1,8 +1,9 @@
 from datetime import timedelta
 from django.utils import timezone
-from django.db.models.query import QuerySet
 from django.views.generic.list import ListView
-from shopapp.models import Order, OrderItems
+from django.views.generic.edit import UpdateView
+from shopapp.models import Order, OrderItems, Product
+from shopapp.forms import ProductForm
 
 class ClientProductsView(ListView):
     template_name = 'shopapp/client_products.html'
@@ -22,3 +23,13 @@ class ClientProductsView(ListView):
         
         return queryset
     
+class ProductView(ListView):
+    model = Product
+    template_name = 'shopapp/products.html'
+    paginate_by = 10
+    
+class ProductDetailView(UpdateView):
+    template_name = "shopapp/product_detail.html"
+    form_class = ProductForm
+    success_url = "/product/"
+    model = Product

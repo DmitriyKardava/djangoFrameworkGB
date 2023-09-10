@@ -1,0 +1,21 @@
+
+{% extends 'shopapp/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Сохранить">
+</form>
+    
+</div>
+        
+    
+
+{% block pagination %}
+    {% include 'includes/pagination.html' %}
+{% endblock pagination %}
+</div>
+{% endblock content %}
